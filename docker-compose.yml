@@ -1,0 +1,61 @@
+version: '2'
+
+volumes:
+    pgdata:
+        external: true
+    data:
+        external: true
+
+services:
+    apache:
+        image: httpd:alpine
+        container_name: apache
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./.httpd/usr/local/apache2/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf
+            - ./.httpd/usr/local/apache2/vhosts/:/usr/local/apache2/vhosts/
+            - ./htdocs:/var/htdocs
+            - ./logs:/var/log/
+        depends_on:
+            - php7fpm
+        restart: always
+    php7fpm:
+        image: php:fpm-alpine
+        build: .php
+        container_name: php7fpm
+        volumes:
+            - ./htdocs:/var/htdocs
+            - ./logs:/var/log/
+        ports:
+            - "9000:9000"
+        restart: always
+    postgres:
+        image: postgres:alpine
+        container_name: postgres
+        ports:
+            - "5432:5432"
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        restart: always
+    msql:
+        image: mysql:latest
+        container_name: msql
+        ports:
+            - "3306:3306"
+        volumes:
+            - data:/var/lib/mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=test
+            - MYSQL_USER=test
+            - MYSQL_PASSWORD=test
+        restart: always
+    memcached:
+        image: memcached:alpine
+        container_name: memcached
+        restart: always
+    rabbaitmq:
+        image: rabbitmq:alpine
+        container_name: rabbitmq
+        restart: always
