@@ -1,10 +1,11 @@
 .idea
-!.gitkeep
 .httpd/hosts/*
 !.httpd/hosts/default.conf
 .nginx/hosts/*
 !.nginx/hosts/default.conf
 logs/httpd/*
+!logs/httpd/.gitkeep
 logs/nginx/*
+!logs/nginx/.gitkeep
 htdocs/*
 !htdocs/example/
