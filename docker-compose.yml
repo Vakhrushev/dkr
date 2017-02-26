@@ -7,19 +7,30 @@ volumes:
         external: true
 
 services:
-    apache:
-        image: httpd:alpine
-        container_name: apache
+    ngx:
+        image: nginx:alpine
+        container_name: ngx
+        restart: always
         ports:
             - "80:80"
             - "443:443"
         volumes:
-            - ./.httpd/usr/local/apache2/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf
-            - ./.httpd/usr/local/apache2/vhosts/:/usr/local/apache2/vhosts/
+            - ./.nginx/hosts/:/etc/nginx/conf.d/
+            - ./htdocs:/var/htdocs
+            - ./logs:/var/log/
+    apache:
+        image: httpd:alpine
+        container_name: apache
+        volumes:
+            - ./.httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf
+            - ./.httpd/hosts/:/usr/local/apache2/vhosts/
             - ./htdocs:/var/htdocs
             - ./logs:/var/log/
         depends_on:
+            - ngx
             - php7fpm
+            - postgres
+            - msql
         restart: always
     php7fpm:
         image: php:fpm-alpine
