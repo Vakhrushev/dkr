@@ -6,6 +6,7 @@
 logs/httpd/*
 !logs/httpd/.gitkeep
 logs/nginx/*
+logs/*
 !logs/nginx/.gitkeep
 htdocs/*
 !htdocs/example/
