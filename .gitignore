@@ -3,6 +3,7 @@
 !.httpd/hosts/default.conf
 .nginx/hosts/*
 !.nginx/hosts/default.conf
+!.nginx/hosts/adx.conf.tpl
 logs/httpd/*
 !logs/httpd/.gitkeep
 logs/nginx/*
