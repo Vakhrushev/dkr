@@ -69,4 +69,11 @@ services:
     rabbaitmq:
         image: rabbitmq:alpine
         container_name: rabbitmq
+        restart: always 
+    dkrdns:
+        build: .dnsmasq
+        container_name: drkdns
+        ports:
+            - "127.0.0.2:53:53/udp"
         restart: always
+
