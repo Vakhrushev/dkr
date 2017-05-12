@@ -1,15 +1,15 @@
 version: '2'
 
 volumes:
-    pgdata:
+    dkr_pgdata:
         external: true
-    data:
+    dkr_msdata:
         external: true
 
 services:
-    ngx:
+    dkr_ngx:
         image: nginx:alpine
-        container_name: ngx
+        container_name: dkr_ngx
         restart: always
         ports:
             - "80:80"
@@ -18,9 +18,9 @@ services:
             - ./.nginx/hosts/:/etc/nginx/conf.d/
             - ./htdocs:/var/htdocs
             - ./logs:/var/log/
-    apache:
+    dkr_apache:
         image: httpd:alpine
-        container_name: apache
+        container_name: dkr_apache
         volumes:
             - ./.httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf
             - ./.httpd/hosts/:/usr/local/apache2/vhosts/
@@ -32,47 +32,47 @@ services:
             - postgres
             - msql
         restart: always
-    php7fpm:
+    dkr_php7:
         image: php:fpm-alpine
         build: .php
-        container_name: php7fpm
+        container_name: dkr_php7
         volumes:
             - ./htdocs:/var/htdocs
             - ./logs:/var/log/
         ports:
             - "9000:9000"
         restart: always
-    postgres:
+    dkr_postgres:
         image: postgres:alpine
-        container_name: postgres
+        container_name: dkr_postgres
         ports:
             - "5432:5432"
         volumes:
-            - pgdata:/var/lib/postgresql/data
+            - dkr_pgdata:/var/lib/postgresql/data
         restart: always
-    msql:
+    dkr_mysql:
         image: mysql:latest
-        container_name: msql
+        container_name: dkr_mysql
         ports:
             - "3306:3306"
         volumes:
-            - data:/var/lib/mysql
+            - dkr_msdata:/var/lib/mysql
         environment:
             - MYSQL_ROOT_PASSWORD=test
             - MYSQL_USER=test
             - MYSQL_PASSWORD=test
         restart: always
-    memcached:
+    dkr_memcached:
         image: memcached:alpine
-        container_name: memcached
+        container_name: dkr_memcached
         restart: always
-    rabbaitmq:
+    dkr_rabbaitmq:
         image: rabbitmq:alpine
-        container_name: rabbitmq
+        container_name: dkr_rabbitmq
         restart: always 
-    dkrdns:
+    dkr_dns:
         build: .dnsmasq
-        container_name: drkdns
+        container_name: drk_dns
         ports:
             - "127.0.0.2:53:53/udp"
         restart: always
